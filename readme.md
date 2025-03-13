@@ -13,14 +13,24 @@
 git clone https://github.com/ryandevz/agrosearch-test.git
 cd agrosearch-test
 ```
+
 3. Create copy of enviroment file
 ```bash
 cp .env.example .env
 ```
+
 4. Run containers
 ```bash
 docker compose up -d
 ```
+5. Install composer dependencies
+```bash
+. ./alias
+composer install
+# or 
+docker compose run --rm composer install
+```
+
 5. Generate application key
 ```bash
 . ./alias
