@@ -1,0 +1,15 @@
+alias composer='docker compose run --rm composer'
+alias artisan='docker compose run --rm artisan'
+alias npm='docker compose run --rm npm'
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+YEAR=$(date +%Y)
+
+echo -e "${GREEN}Development Mode${NOCOLOR}"
+echo "- composer"
+echo "- artisan"
+echo "- npm\n"
+
+echo -e "${RED}Ryandev${NOCOLOR} Happy Codings! - © $YEAR"

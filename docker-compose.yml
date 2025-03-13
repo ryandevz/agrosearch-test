@@ -1,0 +1,99 @@
+#######################################
+# PHP application Docker container
+#######################################
+
+networks:
+  laravel:
+
+services:
+  app:
+    build:
+      context: ./docker/nginx
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - php
+      - postgres
+    networks:
+      - laravel
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/database-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: homestead
+      POSTGRES_USER: homestead
+      POSTGRES_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: postgres
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html:delegated
+    networks:
+      - laravel
+
+  composer:
+    build:
+      context: ./docker/php
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - php
+    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
+    networks:
+      - laravel
+
+  npm:
+    image: node:current-alpine
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "5173:5173"
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
+    networks:
+      - laravel
+
+  artisan:
+    build:
+      context: ./docker/php
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - postgres
+    entrypoint: [ 'php', '/var/www/html/artisan' ]
+    networks:
+      - laravel
