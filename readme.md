@@ -31,7 +31,7 @@ composer install
 docker compose run --rm composer install
 ```
 
-5. Generate application key
+6. Generate application key
 ```bash
 . ./alias
 artisan key:generate
@@ -39,7 +39,7 @@ artisan key:generate
 docker compose run --rm artisan key:generate
 ```
 
-6. Data migration and seeding to database
+7. Data migration and seeding to database
 Migrate
 ```bash
 . ./alias
@@ -48,7 +48,7 @@ artisan migrate --seed
 docker compose run --rm artisan migrate --seed
 ```
 
-7. Application available by address `http://localhost/`
+8. Application available by address `http://localhost/`
 
 ## Authors
 - [ryandev](https://github.com/ryandevz)
